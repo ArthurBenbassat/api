@@ -1,8 +1,8 @@
 <?php
 header('Content-Type: application/json');
-include("../sql/localhost.php");
+include("dbconnection.php");
 $sql="Select * from customers";
-$gelukt = mysqli_query($conn,$sql) or die("Error: " . mysqli_error($conn));
+$gelukt = mysqli_query($connection,$sql) or die("Error: " . mysqli_error($connection));
 $customers = [];
 while($rij=$gelukt -> fetch_assoc()){
 	$customer = new stdClass();
