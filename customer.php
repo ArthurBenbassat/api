@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include("dbconnection.php");
+include("sql/dbconnection.php");
 $sql="Select * from customers";
 $gelukt = mysqli_query($connection,$sql) or die("Error: " . mysqli_error($connection));
 $customers = [];
