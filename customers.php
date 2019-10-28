@@ -3,10 +3,14 @@ header('Content-Type: application/json');
 try {
     include("sql/dbconnection.php");
 
-    $sql="Select * from Customers";
-    $gelukt = mysqli_query($connection,$sql) or throw new Exception('500');
+    $sql="Select * from Customersx";
+    $result = mysqli_query($connection, $sql);
+    if (!$result) {
+        throw new Exception('500');
+    }
+
     $customers = [];
-    while($rij=$gelukt -> fetch_assoc()){
+    while($rij = $result->fetch_assoc()){
         $customer = new stdClass();
         $customer->id = $rij["id"];
         $customer->customer_type_id = $rij["customer_type_id"];
