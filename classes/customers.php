@@ -1,30 +1,21 @@
 <?php
-class Customer {
-    function readCustomer(){
- 
-        $query = "SELECT * FROM ";
-     
-        // prepare query statement
-        $stmt = $this->conn->prepare( $query );
-     
-        // bind id of product to be updated
-        $stmt->bindParam(1, $this->id);
-     
-        // execute query
-        $stmt->execute();
-     
-        // get retrieved row
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-     
-        // set values to object properties
-        $this->email = $row['email'];
-        $this->firstName = $row['first_name'];
-        $this->lastName = $row['last_name'];
-        $this->addressLine1 = $row['address_line1'];
-        $this->postal_code = $row['postal_code'];
-        $this->city = $row['city'];
-        $this->country = $row['country'];
-        $this->phone_number = $row['phone_number'];
-        $this->organization_name = $row['organization_name'];
+class Customer{
+    function readCustomers($sql, $result){
+
+        while ($rij = $result->fetch_assoc()) {
+            $this->id = $rij["id"];
+            $this->customer_type_id = $rij["customer_type_id"];
+            $this->email = $rij["email"];
+            $this->first_name = $rij["first_name"];
+            $this->last_name = $rij["last_name"];
+            $this->address_line1 = $rij["address_line1"];
+            $this->address_line2 = $rij["address_line2"];
+            $this->postal_code = $rij["postal_code"];
+            $this->city = $rij["city"];
+            $this->country = $rij["country"];
+            $this->phone_number = $rij["phone_number"];
+            $this->organization_name = $rij["organization_name"];
+            $this->vat_number = $rij["vat_number"];
+        }
     }
-} 
+}
