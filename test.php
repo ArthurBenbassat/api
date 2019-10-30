@@ -26,6 +26,27 @@ try {
 }
 */
 
+$url = $_SERVER['PHP_SELF'];
+echo $url . "<br>";
 
-echo $_SERVER['PHP_SELF'] . "<br>";
-echo substr($_SERVER['PHP_SELF'],14 ,1);
+$urlItems = explode('/', $url);
+
+switch ($urlItems[2]) {
+    case 'products':
+        $p = new Product();
+        $p->execute($urlItems, $_POST);
+        break;
+    case 'customers':
+        $c = new Customer();
+        $c->execute($urlItems, $_POST);
+        break;  
+    default:
+        throw new Exception(500);
+
+}
+
+
+var_dump($urlItems);
+
+
+

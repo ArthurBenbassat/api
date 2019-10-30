@@ -1,7 +1,26 @@
 <?php
 class Customer{
-    function readCustomers($sql, $result){
+    public function execute($params, $post) {
+        
+    }
 
+    private function getAllCustomers() {
+
+    }
+
+    private function getCustomer($customerID) {
+
+    }
+
+    private function deleteCustomer($customerID) {
+
+    }
+
+    private function updateCustomer() {
+
+    }
+
+    function readCustomers($sql, $result){
         while ($rij = $result->fetch_assoc()) {
             $this->id = $rij["id"];
             $this->customer_type_id = $rij["customer_type_id"];

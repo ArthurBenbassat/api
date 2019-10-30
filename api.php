@@ -43,7 +43,6 @@ try {
             $customers[] = $customer;
         }
         echo json_encode($customers);
-
     } elseif (substr($_SERVER['PHP_SELF'], 13, 8) == "products") {
         // Producten 
         $tableName =  "Products";
