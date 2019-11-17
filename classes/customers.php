@@ -1,7 +1,15 @@
 <?php
 class Customer{
-    public function execute($params, $post) {
+    public function __construct() {
+
         
+    }
+
+    public function execute($params, $data) {
+        $a = new stdClass();
+        $a->error = 0;
+        $a->debug = "de parameters zijn: " . implode(', ', $params) . " en de data is: $data";
+        return $a;
     }
 
     private function getAllCustomers() {

@@ -1,86 +1,55 @@
 <?php
-
 header('Content-Type: application/json');
+require_once 'classes/customers.php';
 try {
-    include "sql/dbconnection.php";
-
-    if (substr($_SERVER['PHP_SELF'], 13, 9) == "customers") {
-        // gebruikers
-        $tableName =  "Customers";
-        if (substr($_SERVER['PHP_SELF'], 23, 1) == "") {
-            $sql = "Select * from $tableName";
-        } else {
-            if ((substr($_SERVER['PHP_SELF'], 24, 1) == "") || (substr($_SERVER['PHP_SELF'], 24, 1) == "/")) {
-                $id =  substr($_SERVER['PHP_SELF'], 23, 1);
-                $sql = "Select * from $tableName where id = $id";
-            } else {
-                $id =  substr($_SERVER['PHP_SELF'], 23, 2);
-                $sql = "Select * from $tableName where id = $id";
-            }
-        }
-        $result = mysqli_query($connection, $sql);
-
-        if (!$result) {
-            throw new Exception('500');
-        }
-
-        $customers = [];
-        while ($rij = $result->fetch_assoc()) {
-            $customer = new stdClass();
-            $customer->id = $rij["id"];
-            $customer->customer_type_id = $rij["customer_type_id"];
-            $customer->email = $rij["email"];
-            $customer->first_name = $rij["first_name"];
-            $customer->last_name = $rij["last_name"];
-            $customer->address_line1 = $rij["address_line1"];
-            $customer->address_line2 = $rij["address_line2"];
-            $customer->postal_code = $rij["postal_code"];
-            $customer->city = $rij["city"];
-            $customer->country = $rij["country"];
-            $customer->phone_number = $rij["phone_number"];
-            $customer->organization_name = $rij["organization_name"];
-            $customer->vat_number = $rij["vat_number"];
-            $customers[] = $customer;
-        }
-        echo json_encode($customers);
-    } elseif (substr($_SERVER['PHP_SELF'], 13, 8) == "products") {
-        // Producten 
-        $tableName =  "Products";
-
-        if (substr($_SERVER['PHP_SELF'], 23, 1) == "") {
-            $sql = "Select * from $tableName";
-        } else {
-            if ((substr($_SERVER['PHP_SELF'], 24, 1) == "") || (substr($_SERVER['PHP_SELF'], 24, 1) == "/")) {
-                $id =  substr($_SERVER['PHP_SELF'], 23, 1);
-                $sql = "Select * from $tableName where id = $id";
-            } else {
-                $id =  substr($_SERVER['PHP_SELF'], 23, 2);
-                $sql = "Select * from $tableName where id = $id";
-            }
-        }
-
-        $result = mysqli_query($connection, $sql);
-
-        if (!$result) {
-            throw new Exception('500');
-        }
-
-        $products = [];
-        while ($rij = $result->fetch_assoc()) {
-            $product = new stdClass();
-            $product->id = $rij["id"];
-            $product->name = $rij["name"];
-            $product->description = $rij["description"];
-            $product->ingredients = $rij["ingredients"];
-            $product->category_id = $rij["category_id"];
-            $product->media_id = $rij["media_id"];
-
-            $products[] = $product;
-        }
-        echo json_encode($products);
-    } else {
-        echo 'we werken er aan sss';
+    // get the URL and extract the string after /api.php/
+    $start = strpos($_SERVER['PHP_SELF'], '/api.php/');
+    if ($start === FALSE) {
+        throw new Exception("No resource");
     }
+
+    $url = substr($_SERVER['PHP_SELF'], $start + 9);
+    if ($url == '') {
+        throw new Exception("No resource");
+    }
+
+    // extract the command + parameters
+    $resourceAndParamaters = explode('/', $url);
+    $params = [];
+
+    $resource = $resourceAndParamaters[0];
+    for ($i = 1; $i < count($resourceAndParamaters); $i++) {
+        $params[] = $resourceAndParamaters[$i];
+    }
+
+    // extract the HTTP command
+    $requestType = $_SERVER['REQUEST_METHOD'];
+    if ($requestType != 'GET') {
+        $data = file_get_contents('php://input');
+    }
+    else {
+        $data = '';
+    }
+
+    // analyse the command
+    switch ($resource) {
+        case 'customers':
+            $o = new Customer();
+            $retval = $o->execute($params, $data);
+            break;
+        case 'products':
+            $retval = new Product($params, $data);
+            break;
+        default:
+            throw new Exception("Unknown resource: $resource");
+    }
+
+    echo json_encode($retval);
 } catch (Exception $e) {
-    http_response_code(500);
+    $errorObject = new stdClass();
+    $errorObject->error = 1;
+    $errorObject->errorDescription = $e->getMessage();
+    echo json_encode($errorObject);
 }
+
+
