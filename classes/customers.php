@@ -1,5 +1,5 @@
 <?php
-include('../sql/dbconnection.php');
+require_once 'sql/dbconnection.php';
 
 class Customer
 {
@@ -7,13 +7,17 @@ class Customer
     public $firstName = '';
     public $lastName = '';
     public $email = '';
- 
+
 
     public function login($email, $password)
     {
         $this->checkBlankEmailOrPassword($email, $password);
 
         $this->checkUser($email, $password);
+        $errorObject = new stdClass();
+        $errorObject->error = 200;
+        $errorObject->errorDescription = "Successfully logged in";
+        return $errorObject;
     }
 
     private function checkBlankEmailOrPassword($email, $password)
