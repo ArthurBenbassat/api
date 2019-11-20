@@ -35,10 +35,19 @@ try {
     switch ($resource) {
         case 'customers':
             $o = new Customer();
-            $retval = $o->execute($params, $data);
+            $retval = $o->execucte($params, $data);
             break;
         case 'products':
             $retval = new Product($params, $data);
+            break;
+        case 'login':
+            $splitdata = explode('&', $data);
+            if (substr($splitdata[0], 0, 5) == "email" && substr($splitdata[1], 0, 8)) {
+                $email = substr($splitdata[0], 6);
+                $password = substr($splitdata[1], 9);
+            }
+            $o = new Customer();
+            $retval = $o->login($email, $password);
             break;
         default:
             throw new Exception("Unknown resource: $resource");
