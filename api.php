@@ -1,8 +1,9 @@
 <?php
 header('Content-Type: application/json');
-require_once 'classes/customers.php';
-require_once 'classes/login.php';
-require_once 'classes/register.php';
+//require_once 'classes/customers.php';
+//require_once 'classes/login.php';
+require_once 'classes/applicationProduct.php';
+//require_once 'classes/register.php';
 
 try {
     // get the URL and extract the string after /api.php/
@@ -40,7 +41,8 @@ try {
             $retval = $o->execute($params, $data);
             break;
         case 'products':
-            $retval = new Product($params, $data);
+            $o = new ApplicationProduct();
+            $retval = $o->execute($params, $data);
             break;
         case 'login':
             $splitdata = explode('&', $data);
