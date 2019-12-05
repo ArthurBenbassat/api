@@ -3,7 +3,7 @@
 require_once 'sql/settings.php';
 
 class DBConnection {
-    private $connection;
+    public $connection;
 
     function __construct() {
         $this->connection = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASSWORD, SQL_DATABASE);

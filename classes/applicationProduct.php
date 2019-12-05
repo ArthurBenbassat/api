@@ -10,8 +10,8 @@ class ApplicationProduct {
     }
 
     private function get($id) {
-        $data = new DataProduct();
+        $product = new DataProduct();
 
-        return $data->get($id);
+        return $product->read($id);
     }
 }

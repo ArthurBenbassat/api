@@ -1,9 +1,9 @@
 <?php
 header('Content-Type: application/json');
 //require_once 'classes/customers.php';
-//require_once 'classes/login.php';
+require_once 'classes/applicationLogin.php';
 require_once 'classes/applicationProduct.php';
-//require_once 'classes/register.php';
+require_once 'classes/applicationRegister.php';
 
 try {
     // get the URL and extract the string after /api.php/
@@ -29,10 +29,12 @@ try {
     // extract the HTTP command
     $requestType = $_SERVER['REQUEST_METHOD'];
     if ($requestType != 'GET') {
-        $data = file_get_contents('php://input');
+        $data = file_get_contents('php://input');            
+        $data = json_decode($data);
     } else {
         $data = '';
     }
+
 
     // analyse the command
     switch ($resource) {
@@ -45,28 +47,19 @@ try {
             $retval = $o->execute($params, $data);
             break;
         case 'login':
-            $splitdata = explode('&', $data);
-            if (substr($splitdata[0], 0, 5) == "email" && substr($splitdata[1], 0, 8)) {
-                $email = substr($splitdata[0], 6);
-                $password = substr($splitdata[1], 9);
-            }
-            $o = new Login();
-            $retval = $o->execute($email, $password);
+            $o = new ApplicationLogin();
+            $retval = $o->execute($params, $data);            
             break;
         case 'register':
-            $splitdata = explode('&', $data);
-            for ($i=0; $i < count($splitdata); $i++) {
-                $splitdata2 = explode('=', $splitdata[$i]);
-                ${$splitdata2[0]} = $splitdata2[1];
-            }
-
-            $o =  new Register();
-            $retval = $o->execute($email, $first_name, $last_name, $address_line1, $address_line2, $postal_code, $city, $country, $phone_number, $organization_name, $vat_number, $password, $password2);
+            $o =  new ApplicationRegister();
+            $retval = $o->execute($params, $data);            
             break;
         default:
             throw new Exception("Unknown resource: $resource");
     }
 
+    $retval->error = 200;
+    $retval->errorDescription = '';
     echo json_encode($retval);
 } catch (Exception $e) {
     $errorObject = new stdClass();
