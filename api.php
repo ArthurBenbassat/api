@@ -38,10 +38,6 @@ try {
 
     // analyse the command
     switch ($resource) {
-        case 'customers':
-            $o = new Customer();
-            $retval = $o->execute($params, $data);
-            break;
         case 'products':
             $o = new ApplicationProduct();
             $retval = $o->execute($params, $data);
