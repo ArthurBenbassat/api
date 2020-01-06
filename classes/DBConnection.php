@@ -7,6 +7,7 @@ class DBConnection {
 
     function __construct() {
         $this->connection = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASSWORD, SQL_DATABASE);
+        mysqli_set_charset($this->connection, 'utf8');
         if (!$this->connection) {
           throw new Exception('Cannot connect to the database');
         }       

@@ -1,8 +1,8 @@
 <?php
 
-require_once 'dataProduct.php';
+require_once 'dataCategory.php';
 
-class ApplicationProduct {
+class ApplicationCategory {
     public function execute($params, $data) {
         if (count($params)) {
             return $this->get($params[0]);
@@ -12,14 +12,14 @@ class ApplicationProduct {
     }
 
     private function get($id) {
-        $product = new DataProduct();
+        $category = new DataCategory();
 
-        return $product->read($id);
+        return $category->read($id);
     }
 
     private function getAll() {
-        $product = new DataProduct();
+        $categories = new DataCategory();
 
-        return $product->readAll();        
+        return $categories->readAll();        
     }
 }

@@ -1,12 +1,14 @@
 <?php
+ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 
 require_once 'dataCustomer.php';
 require_once 'businessCustomer.php';
 
 class ApplicationRegister {
     public function execute($params, $data) {
+        $this->checkEmailOrPassword($data->email, $data->password, $data->password2);
         $dataCustomer = new DataCustomer();
-        $businessCustomer = new BusinessCustomer();    
+        $businessCustomer = new BusinessCustomer();            
         $businessCustomer->customer_type_id = $this->getCustomerTypeID($data->organization_name);
         $businessCustomer->email = $data->email;
         $businessCustomer->first_name = $data->first_name;
@@ -21,7 +23,6 @@ class ApplicationRegister {
         $businessCustomer->vat_number = $data->vat_number;
         $businessCustomer->password = $data->password;
         $businessCustomer->verified = $data->verified;    
-        file_put_contents('c:\tmp\log.txt', print_r($businessCustomer, TRUE));
         $id = $dataCustomer->create($businessCustomer);
         return $dataCustomer->read($id);
     }

@@ -11,7 +11,7 @@ class DataProduct {
         $this->db = new DBConnection();
     }
     public function read($id) {
-        $sql = "SELECT m.media1 photo, p.name, p.price, p.id FROM Products p  INNER JOIN media m ON m.id = p.media_id WHERE p.id = $id;";
+        $sql = "SELECT m.media1 photo, p.name, p.price, p.id FROM shop_products p  left outer JOIN shop_media m ON m.id = p.media_id WHERE p.id = $id;";
         $result = $this->db->execute($sql);
 
         if ($row = $result->fetch_assoc()) {
@@ -28,7 +28,7 @@ class DataProduct {
         return $product;
     }
     public function readAll() {
-        $sql = "SELECT m.media1 photo, p.name, p.price, p.id FROM Products p  INNER JOIN media m ON m.id = p.media_id;";
+        $sql = "SELECT m.media1 photo, p.name, p.price, p.id FROM shop_products p  Left outer JOIN shop_media m ON m.id = p.media_id;";
         $result = $this->db->execute($sql);
 
         $products = [];
@@ -41,7 +41,6 @@ class DataProduct {
             $product->price = $row['price'];
             $products[] = $product;
         } 
-
         return $products;
     }
 }

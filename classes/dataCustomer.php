@@ -12,34 +12,38 @@ class DataCustomer
     }
 
     public function create($businessCustomer)
-    {        
-        $salt = 'zrgfkjhzghzkrgj';
-        $hashedPassword = md5($businessCustomer->password . $salt);
+    {       
+        try {
+            $salt = 'zrgfkjhzghzkrgj';
+            $hashedPassword = md5($businessCustomer->password . $salt);
 
-        $sql = "insert into Customers (customer_type_id,email,first_name,last_name,address_line1,address_line2,postal_code,city,country,phone_number,organization_name,vat_number,password,verified) values (
-        " . $businessCustomer->customer_type_id . ",
-        '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->email) . "',
-        '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->first_name) . "',
-        '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->last_name) . "',
-        '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->address_line1) . "',
-        '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->address_line2) . "',
-        '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->postal_code) . "',
-        '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->city) . "',
-        '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->country) . "',
-        '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->phone_number) . "',
-        '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->organization_name) . "',
-        '',
-        '" . $hashedPassword . "',
-        '0')";
+            $sql = "insert into shop_customers (customer_type_id,email,first_name,last_name,address_line1,address_line2,postal_code,city,country,phone_number,organization_name,vat_number,password,verified) values (
+            " . $businessCustomer->customer_type_id . ",
+            '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->email) . "',
+            '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->first_name) . "',
+            '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->last_name) . "',
+            '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->address_line1) . "',
+            '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->address_line2) . "',
+            '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->postal_code) . "',
+            '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->city) . "',
+            '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->country) . "',
+            '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->phone_number) . "',
+            '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->organization_name) . "',
+            '',
+            '" . $hashedPassword . "',
+            '0')";
 
-        $result = $this->db->execute($sql);
+            $result = $this->db->execute($sql);
 
-        return $this->db->connection->insert_id;
+            return $this->db->connection->insert_id;
+        } catch (Exception $e) {
+            throw new Exception("Cannot create user"); 
+        }
     }
 
     public function read($customerID)
     {
-        $sql = "SELECT * FROM Customers WHERE id = $customerID";
+        $sql = "SELECT * FROM shop_customers WHERE id = $customerID";
         $result = $this->db->execute($sql);
 
         if ($rij = $result->fetch_assoc()) {
@@ -105,7 +109,7 @@ class DataCustomer
     public function checkUser($email, $password)
     {
         
-        if ($stmt = $this->db->connection->prepare('SELECT id, password, first_name, last_name, verified FROM Customers WHERE email = ?')) {
+        if ($stmt = $this->db->connection->prepare('SELECT id, password, first_name, last_name, verified FROM shop_customers WHERE email = ?')) {
             $stmt->bind_param('s', $email);
             $stmt->execute();
             $stmt->store_result();

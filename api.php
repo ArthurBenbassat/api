@@ -4,6 +4,8 @@ header('Content-Type: application/json');
 require_once 'classes/applicationLogin.php';
 require_once 'classes/applicationProduct.php';
 require_once 'classes/applicationRegister.php';
+require_once 'classes/applicationVerify.php';
+require_once 'classes/applicationCategory.php';
 
 try {
     // get the URL and extract the string after /api.php/
@@ -50,16 +52,25 @@ try {
             $o =  new ApplicationRegister();
             $retval = $o->execute($params, $data);            
             break;
+        case 'verify':
+            file_put_contents('C:\tmp\log.txt', var_dump($data, true)); die();
+            $o = new ApplicationVerify();
+            $retval = $o->execute($params, $data);
+            break;
+        case 'categories':
+            $o = new ApplicationCategory();
+            $retval = $o->execute($params, $data);
+            break;
         default:
             throw new Exception("Unknown resource: $resource");
     }
-
-    $retval->error = 200;
-    $retval->errorDescription = '';
+    
+    http_response_code(200);
+    //var_dump($retval);
+    //echo json_encode($retval);
+    //exit;
     echo json_encode($retval);
 } catch (Exception $e) {
-    $errorObject = new stdClass();
-    $errorObject->error = 500;
-    $errorObject->errorDescription = $e->getMessage();
-    echo json_encode($errorObject);
+    http_response_code(500);    
+    echo json_encode(['errorMessage' => $e->getMessage()]);
 }
