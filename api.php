@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-//require_once 'classes/customers.php';
+
 require_once 'classes/applicationLogin.php';
 require_once 'classes/applicationProduct.php';
 require_once 'classes/applicationRegister.php';
@@ -53,7 +53,6 @@ try {
             $retval = $o->execute($params, $data);            
             break;
         case 'verify':
-            file_put_contents('C:\tmp\log.txt', var_dump($data, true)); die();
             $o = new ApplicationVerify();
             $retval = $o->execute($params, $data);
             break;
@@ -66,9 +65,7 @@ try {
     }
     
     http_response_code(200);
-    //var_dump($retval);
-    //echo json_encode($retval);
-    //exit;
+    
     echo json_encode($retval);
 } catch (Exception $e) {
     http_response_code(500);    

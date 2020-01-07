@@ -33,11 +33,11 @@ class ApplicationRegister {
             throw new Exception('Fill everthing in!');
         }
         if ($password != $password2) {
-            throw new Exception('passwords are not the same');
+            throw new Exception('Passwords are not the same');
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception('email is not correct');
+            throw new Exception('Email is not correct');
         }
     }
 

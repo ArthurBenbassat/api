@@ -32,8 +32,8 @@ class DataCustomer
             '',
             '" . $hashedPassword . "',
             '0')";
-
-            $result = $this->db->execute($sql);
+                
+            $this->db->execute($sql);
 
             return $this->db->connection->insert_id;
         } catch (Exception $e) {
@@ -78,9 +78,17 @@ class DataCustomer
     public function delete($customerID)
     { }
 
-    public function update($businessCustomer)
-    { 
+    public function update($businessCustomer){ 
 
+        try {
+            $sql = "UPDATE shop_customers
+            SET verified = 1
+            WHERE email = '$businessCustomer->email'";
+            $this->db->execute($sql);
+        } catch (Exception $e) {
+            throw new Exception("Customer: $businessCustomer->email cannot update status");
+        }
+        
     }
 
     public function readAll()
