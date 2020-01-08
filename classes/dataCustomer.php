@@ -16,8 +16,9 @@ class DataCustomer
         try {
             $salt = 'zrgfkjhzghzkrgj';
             $hashedPassword = md5($businessCustomer->password . $salt);
+            $token = bin2hex(openssl_random_pseudo_bytes(8));
 
-            $sql = "insert into shop_customers (customer_type_id,email,first_name,last_name,address_line1,address_line2,postal_code,city,country,phone_number,organization_name,vat_number,password,verified) values (
+            $sql = "insert into shop_customers (customer_type_id,email,first_name,last_name,address_line1,address_line2,postal_code,city,country,phone_number,organization_name,vat_number,password,verified,token) values (
             " . $businessCustomer->customer_type_id . ",
             '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->email) . "',
             '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->first_name) . "',
@@ -31,7 +32,8 @@ class DataCustomer
             '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->organization_name) . "',
             '',
             '" . $hashedPassword . "',
-            '0')";
+            '0',
+            '". $token . "')";
                 
             $this->db->execute($sql);
 
@@ -64,6 +66,7 @@ class DataCustomer
             $businessCustomer->vat_number = $rij["vat_number"];
             $businessCustomer->verified = $rij['verified'];
             $businessCustomer->password = '';
+            $businessCustomer->token = $rij['token'];
 
             return $businessCustomer;
         }
@@ -83,7 +86,7 @@ class DataCustomer
         try {
             $sql = "UPDATE shop_customers
             SET verified = 1
-            WHERE email = '$businessCustomer->email'";
+            WHERE id = '$businessCustomer->id'";
             $this->db->execute($sql);
         } catch (Exception $e) {
             throw new Exception("Customer: $businessCustomer->email cannot update status");

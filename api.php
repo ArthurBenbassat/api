@@ -6,6 +6,7 @@ require_once 'classes/applicationProduct.php';
 require_once 'classes/applicationRegister.php';
 require_once 'classes/applicationVerify.php';
 require_once 'classes/applicationCategory.php';
+require_once 'classes/applicationCustomer.php';
 
 try {
     // get the URL and extract the string after /api.php/
@@ -40,6 +41,10 @@ try {
 
     // analyse the command
     switch ($resource) {
+        case 'customer':
+            $o =  new ApplicationCustomer();
+            $retval = $o->execute($params, $data);
+            break;
         case 'products':
             $o = new ApplicationProduct();
             $retval = $o->execute($params, $data);

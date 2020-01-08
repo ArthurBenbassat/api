@@ -15,4 +15,5 @@ class BusinessCustomer {
     public $vat_number;
     public $password;
     public $verified;    
+    public $token;
 }
