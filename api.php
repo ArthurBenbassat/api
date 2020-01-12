@@ -7,6 +7,7 @@ require_once 'classes/applicationRegister.php';
 require_once 'classes/applicationVerify.php';
 require_once 'classes/applicationCategory.php';
 require_once 'classes/applicationCustomer.php';
+require_once 'classes/applicationCart.php';
 
 try {
     // get the URL and extract the string after /api.php/
@@ -64,6 +65,10 @@ try {
         case 'categories':
             $o = new ApplicationCategory();
             $retval = $o->execute($params, $data);
+            break;
+        case 'cart':
+            $o = new ApplicationCart();
+            $retval = $o->execute($requestType, $params, $data);
             break;
         default:
             throw new Exception("Unknown resource: $resource");
