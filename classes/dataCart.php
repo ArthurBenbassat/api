@@ -45,12 +45,27 @@ class DataCart
             throw new Exception("Cart $cartId not found");
         }
     }
+    public function readByGuid($businessCart) {
+        $sql = "SELECT * FROM shop_cart WHERE guid = $businessCart->guid";
+        $result = $this->db->execute($sql);
+        if ($rij = $result->fetch_assoc()) {
+            $businessCart = new BusinessCart();
 
-    public function update($guid)
-    {
+            $businessCart->id = $rij['id'];
+            $businessCart->guid = $rij['guid'];
+            $businessCart->last_update = $rij['last_update'];
+            $businessCart->user_id = $rij['user_id'];
+
+            $cart_lines = new DataCartLine(); 
+            $businessCart->lines = $cart_lines->read($businessCart);
+
+            return $businessCart;
+        }
+    }
+    public function update($guid) {
     }
 
-    public function delete($guid, $id)
-    {
+    public function delete($guid, $id) {
+        $sql = "DELETE FROM "
     }
 }
