@@ -66,6 +66,6 @@ class DataCart
     }
 
     public function delete($guid, $id) {
-        $sql = "DELETE FROM "
+        $sql = "DELETE FROM ";
     }
 }
