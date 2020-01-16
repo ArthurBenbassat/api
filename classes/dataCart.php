@@ -57,7 +57,7 @@ class DataCart
             $businessCart->user_id = $rij['user_id'];
 
             $cart_lines = new DataCartLine(); 
-            $businessCart->lines = $cart_lines->read($businessCart);
+            $businessCart->lines[] = $cart_lines->read($businessCart);
 
             return $businessCart;
         }
@@ -65,7 +65,12 @@ class DataCart
     public function update($guid) {
     }
 
-    public function delete($guid, $id) {
-        $sql = "DELETE FROM ";
+    public function delete($businessCart) {
+        try {
+        $sql = "DELETE FROM shop_cart WHERE guid = {$businessCart->guid}";
+        $this->db->execute($sql);
+        } catch (Exception $e) {
+            throw new Exception("Cannot delete cart $businessCart->id");
+        }
     }
 }

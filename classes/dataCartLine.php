@@ -41,11 +41,12 @@ class DataCartLine
             }
     }
 
-    public function update($guid)
+    public function update($businessCart)
     {
     }
 
-    public function delete($guid, $id)
+    public function delete($businessCart ,$businessCartLine)
     {
+        
     }
 }

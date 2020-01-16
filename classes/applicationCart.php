@@ -22,6 +22,8 @@ class ApplicationCart {
             return $cart->read($businessCart->id);
 
         } elseif ($requestType == 'GET') {
+            $businessCart->guid = $params->guid;
+            return $cart->readByGuid($businessCart);
 
         } elseif ($requestType == 'PUT') {
             $businessCart->guid = $data->guid;
@@ -32,7 +34,7 @@ class ApplicationCart {
             $businessCartLine->product_id = $data->product_id;
 
             if (Count($cart->readByGuid($businessCart)->lines) == 1) {
-                $cart_line->delete($businessCart);
+                $cart_line->delete($businessCart, $businessCartLine);
                 $cart->delete($businessCart);
             } else {
                 $cart_line->delete($businessCart, $businessCartLine);
