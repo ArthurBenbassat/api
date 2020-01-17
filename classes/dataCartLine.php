@@ -45,8 +45,8 @@ class DataCartLine
     {
     }
 
-    public function delete($businessCart ,$businessCartLine)
-    {
-        
+    public function delete($businessCart ,$businessCartLine) {
+        $sql = "DELETE FROM shop_cart_lines WHERE id = $businessCartLine->id";
+        $this->db->execute($sql);
     }
 }
