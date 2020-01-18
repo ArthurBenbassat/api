@@ -27,6 +27,16 @@ class DataCart
 
     public function read($cartId) {
         $sql = "SELECT * FROM shop_cart WHERE id = $cartId";
+        return $this->readBySQL($sql);
+    }
+
+
+    public function readByGuid($businessCart) {
+        $sql = "SELECT * FROM shop_cart WHERE guid = '$businessCart->guid'";
+        return $this->readBySQL($sql);
+    }
+
+    private function readBySQL($sql) {        
         $result = $this->db->execute($sql);
 
         if ($rij = $result->fetch_assoc()) {
@@ -38,39 +48,39 @@ class DataCart
             $businessCart->user_id = $rij['user_id'];
 
             $cart_lines = new DataCartLine(); 
-            $businessCart->lines = $cart_lines->read($businessCart);
+            $cart_lines->read($businessCart);
 
             return $businessCart;
         } else {
-            throw new Exception("Cart $cartId not found");
+            throw new Exception("Cart {$businessCart->id} not found");
         }
     }
-    public function readByGuid($businessCart) {
-        $sql = "SELECT * FROM shop_cart WHERE guid = $businessCart->guid";
-        $result = $this->db->execute($sql);
-        if ($rij = $result->fetch_assoc()) {
-            $businessCart = new BusinessCart();
 
-            $businessCart->id = $rij['id'];
-            $businessCart->guid = $rij['guid'];
-            $businessCart->last_update = $rij['last_update'];
-            $businessCart->user_id = $rij['user_id'];
-
-            $cart_lines = new DataCartLine(); 
-            $businessCart->lines[] = $cart_lines->read($businessCart);
-
-            return $businessCart;
-        }
-    }
-    public function update($guid) {
-    }
-
-    public function delete($businessCart) {
+    public function updateUser($userId, $guid) {
         try {
-        $sql = "DELETE FROM shop_cart WHERE guid = {$businessCart->guid}";
-        $this->db->execute($sql);
+            $sql = "UPDATE shop_cart SET user_id = $userId WHERE guid = $guid";
+            $this->db->execute($sql);
         } catch (Exception $e) {
-            throw new Exception("Cannot delete cart $businessCart->id");
+            throw new Exception("Cannot update user_id from user id: $userId");
+        }
+    }
+
+    public function updateDate($businessCart) {
+        // OF MET TRIGGER?
+        try {
+            $sql = "UPDATE shop_cart SET last_update = now() WHERE guid = {$businessCart->guid}";
+            $this->db->execute($sql);
+        } catch (Exception $e) {
+            throw new Exception("Cannot update date from guid: {$businessCart->guid}");
+        }
+    }
+
+    public function delete($guid) {
+        try {
+            $sql = "DELETE FROM shop_cart WHERE guid = $guid";
+            $this->db->execute($sql);
+        } catch (Exception $e) {
+            throw new Exception("Cannot delete cart $guid");
         }
     }
 }

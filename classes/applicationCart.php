@@ -22,11 +22,12 @@ class ApplicationCart {
             return $cart->read($businessCart->id);
 
         } elseif ($requestType == 'GET') {
-            $businessCart->guid = $params->guid;
+            $businessCart->guid = $params[0];
             return $cart->readByGuid($businessCart);
 
         } elseif ($requestType == 'PUT') {
             $businessCart->guid = $data->guid;
+            $businessCartLine->product_id = $data->product_id;
             return $cart_line->create($cart->readByGuid($businessCart), $businessCartLine);
             
         } elseif ($requestType == 'DELETE') {

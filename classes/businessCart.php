@@ -1,7 +1,7 @@
 <?php
 class BusinessCart {
     public $id;
-    public $date;
+    public $last_update;
     public $user_id;
     public $lines = [];
 }

@@ -1,7 +1,7 @@
 <?php
 class BusinessCartLine {
     public $id;
-    public $cartId;
+    public $cart_id;
     public $product;
     public $quantity;
 }
