@@ -13,14 +13,30 @@ class ApplicationCart {
         $businessCart = new BusinessCart();
 
         if ($requestType == 'POST') {
-            $businessCart->user_id = $data->user_id; 
-            $businessCartLine->product_id = $data->product_id;
-            $businessCartLine->quantity = $data->quantity;
+            if (isset($data->user_id)) {
+                $businessCart->user_id = $data->user_id; 
+            } else {
+                $businessCart->user_id = '';
+            }
+            
+            
+            if (isset($data->guid)) {
+                $businessCartLine->product_id = $data->product_id;
+                $businessCart = $cart->readByGuid($businessCart->guid);
+                
+                $businessCartLine->quantity = $data->quantity;
+                $businessCart->guid = $data->guid;
+                
+                $cart_line->create($businessCart->cart, $businessCartLine);
+            } else {
+                $businessCartLine->quantity = $data->quantity;
+                $businessCart->guid = $data->guid;
+                
+                $businessCart->id = $cart->create($businessCart);
+                $cart_line->create($businessCart->id, $businessCartLine);
 
-            $businessCart->id = $cart->create($businessCart);
-            $cart_line->create($businessCart, $businessCartLine);
-            return $cart->read($businessCart->id);
-
+                return $cart->readById($businessCart->id);
+            }
         } elseif ($requestType == 'GET') {
             $businessCart->guid = $params[0];
             return $cart->readByGuid($businessCart);

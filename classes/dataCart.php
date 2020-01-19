@@ -13,8 +13,7 @@ class DataCart
         $this->db = new DBConnection();
     }
 
-    public function create($businessCart)
-    {
+    public function create($businessCart) {
         try {
             $sql = "INSERT INTO shop_cart (guid, last_update, user_id) values (uuid(), now(), {$businessCart->user_id})";
             $this->db->execute($sql);
@@ -25,14 +24,14 @@ class DataCart
         }
     }
 
-    public function read($cartId) {
+    public function readById($cartId) {
         $sql = "SELECT * FROM shop_cart WHERE id = $cartId";
         return $this->readBySQL($sql);
     }
 
 
-    public function readByGuid($businessCart) {
-        $sql = "SELECT * FROM shop_cart WHERE guid = '$businessCart->guid'";
+    public function readByGuid($guid) {
+        $sql = "SELECT * FROM shop_cart WHERE guid = '$guid'";
         return $this->readBySQL($sql);
     }
 
