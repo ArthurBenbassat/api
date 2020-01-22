@@ -15,7 +15,7 @@ class DataCart
 
     public function create($businessCart) {
         try {
-            $sql = "INSERT INTO shop_cart (guid, last_update, user_id) values (uuid(), now(), {$businessCart->user_id})";
+            $sql = "INSERT INTO shop_cart (guid, last_update, user_id) values (uuid(), now(), '{$businessCart->user_id}')";
             $this->db->execute($sql);
             
             return $this->db->connection->insert_id;
@@ -36,6 +36,7 @@ class DataCart
     }
 
     private function readBySQL($sql) {        
+        
         $result = $this->db->execute($sql);
 
         if ($rij = $result->fetch_assoc()) {
@@ -51,13 +52,13 @@ class DataCart
 
             return $businessCart;
         } else {
-            throw new Exception("Cart {$businessCart->id} not found");
+            throw new Exception("Cart {$businessCart->id} / {$businessCart->guid} not found");
         }
     }
 
     public function updateUser($userId, $guid) {
         try {
-            $sql = "UPDATE shop_cart SET user_id = $userId WHERE guid = $guid";
+            $sql = "UPDATE shop_cart SET user_id = $userId WHERE guid = '$guid'";
             $this->db->execute($sql);
         } catch (Exception $e) {
             throw new Exception("Cannot update user_id from user id: $userId");
@@ -67,7 +68,7 @@ class DataCart
     public function updateDate($businessCart) {
         // OF MET TRIGGER?
         try {
-            $sql = "UPDATE shop_cart SET last_update = now() WHERE guid = {$businessCart->guid}";
+            $sql = "UPDATE shop_cart SET last_update = now() WHERE guid = '{$businessCart->guid}'";
             $this->db->execute($sql);
         } catch (Exception $e) {
             throw new Exception("Cannot update date from guid: {$businessCart->guid}");

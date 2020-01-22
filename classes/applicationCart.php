@@ -11,27 +11,28 @@ class ApplicationCart {
         $cart_line = new DataCartLine();
         $businessCartLine = new BusinessCartLine();
         $businessCart = new BusinessCart();
-
+        //file_put_contents("C:\tmp\log.txt", "");exit;
         if ($requestType == 'POST') {
-            if (isset($data->user_id)) {
+            if (!empty($data->user_id)) {
                 $businessCart->user_id = $data->user_id; 
             } else {
                 $businessCart->user_id = '';
             }
-            
-            
-            if (isset($data->guid)) {
-                $businessCartLine->product_id = $data->product_id;
+
+            if (isset($params[0]) || !empty($params[0])) {
+                $businessCart->guid = $params[0];
+                
                 $businessCart = $cart->readByGuid($businessCart->guid);
-                
+
+                $businessCartLine->product_id = $data->product_id;
                 $businessCartLine->quantity = $data->quantity;
-                $businessCart->guid = $data->guid;
-                
-                $cart_line->create($businessCart->cart, $businessCartLine);
+                $cart->updateDate($businessCart);
+                $cart_line->create($businessCart->id, $businessCartLine);
+                return $cart->readByGuid($businessCart->guid);
             } else {
                 $businessCartLine->quantity = $data->quantity;
-                $businessCart->guid = $data->guid;
-                
+                $businessCartLine->product_id = $data->product_id;
+               
                 $businessCart->id = $cart->create($businessCart);
                 $cart_line->create($businessCart->id, $businessCartLine);
 
@@ -39,31 +40,51 @@ class ApplicationCart {
             }
         } elseif ($requestType == 'GET') {
             $businessCart->guid = $params[0];
-            return $cart->readByGuid($businessCart);
+            return $cart->readByGuid($businessCart->guid);
 
         } elseif ($requestType == 'PUT') {
-            $businessCart->guid = $data->guid;
-            $businessCartLine->product_id = $data->product_id;
-            return $cart_line->create($cart->readByGuid($businessCart), $businessCartLine);
+            if (isset($params[1])) {
+                // update of cart line
+                if ($params[1] == 'line') {
+                    $businessCart->guid = $params[0];                    
+                    $businessCartLine->quantity = $data->quantity;
+                    $businessCartLine->id = $params[2];
+                    $cart_line->updateQuantity($cart->readByGuid($businessCart->guid), $businessCartLine);
+                    $cart->updateDate($businessCart);
+                } else {
+                    throw new Exception('Unknown cart resource');
+                }
+            } else {
+                // update of the cart
+                $businessCart->guid = $params[0];
+                $businessCart->user_id = $data->user_id;
+                $cart->updateUser($businessCart->user_id, $businessCart->guid);
+                $cart->updateDate($businessCart);
+            }
+                        
+            return $cart->readByGuid($businessCart->guid);
             
         } elseif ($requestType == 'DELETE') {
-            $businessCart->guid = $data->guid;
-            $businessCartLine->product_id = $data->product_id;
-
-            if (Count($cart->readByGuid($businessCart)->lines) == 1) {
-                $cart_line->delete($businessCart, $businessCartLine);
-                $cart->delete($businessCart);
+            if (isset($params[1])) {
+                // update of cart line
+                if ($params[1] == 'line') {
+                    $businessCart->guid = $params[0];                    
+                    $businessCartLine->id = $params[2];
+                    $cart_line->delete($cart->readByGuid($businessCart->guid), $businessCartLine);
+                    $cart->updateDate($businessCart);
+                } else {
+                    throw new Exception('Unknown cart resource');
+                }
             } else {
-                $cart_line->delete($businessCart, $businessCartLine);
-                $cart->delete($businessCart);
-                return $cart->readByGuid($businessCart);
+                // update of the cart
+                $businessCart->guid = $params[0];
+                $cart->delete($businessCart->guid);
             }
+                        
+            return $cart->readByGuid($businessCart->guid);
             
         } else {
             throw new Exception("Unknown request type: $requestType");
         }
-
-        
-
     }
 }
