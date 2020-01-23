@@ -75,7 +75,7 @@ class DataCart
         }
     }
 
-    public function delete($guid) {
+    public function deleteLine($guid) {
         try {
             $sql = "DELETE FROM shop_cart WHERE guid = $guid";
             $this->db->execute($sql);

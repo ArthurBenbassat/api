@@ -68,9 +68,10 @@ class ApplicationCart {
             if (isset($params[1])) {
                 // update of cart line
                 if ($params[1] == 'line') {
-                    $businessCart->guid = $params[0];                    
+                    $businessCart->guid = $params[0];
                     $businessCartLine->id = $params[2];
-                    $cart_line->delete($cart->readByGuid($businessCart->guid), $businessCartLine);
+                    
+                    $cart_line->deleteLine($cart->readByGuid($businessCart->guid), $businessCartLine);
                     $cart->updateDate($businessCart);
                 } else {
                     throw new Exception('Unknown cart resource');
@@ -78,9 +79,9 @@ class ApplicationCart {
             } else {
                 // update of the cart
                 $businessCart->guid = $params[0];
-                $cart->delete($businessCart->guid);
+                $cart->deleteLine($businessCart->guid);
             }
-                        
+            
             return $cart->readByGuid($businessCart->guid);
             
         } else {

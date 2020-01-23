@@ -45,19 +45,19 @@ class DataCartLine
 
     public function updateQuantity($businessCart, $businessCartLine) {
         try {
-        $sql = "UPDATE shop_cart_lines SET quantity = {$businessCartLine->quantity} WHERE cart_id = {$businessCart->id} AND id = {$businessCartLine->id}";
+            $sql = "UPDATE shop_cart_lines SET quantity = {$businessCartLine->quantity} WHERE cart_id = {$businessCart->id} AND id = {$businessCartLine->id}";
             $this->db->execute($sql);
         } catch (Exception $e) {
-            throw new Exception("Cannot update cart line with cart id: $businessCart->id");
+            throw new Exception("Cannot update cart line with cart id: {$businessCart->id}");
         }
     }
 
-    public function delete($businessCart ,$businessCartLine) {
+    public function deleteLine($businessCart, $businessCartLine) {
         try {
             $sql = "DELETE FROM shop_cart_lines WHERE cart_id = {$businessCart->id} AND id = {$businessCartLine->id}";
             $this->db->execute($sql);
         } catch (Exception $e) {
-            throw new Exception("Cannot delete cart line with cart id: $businessCart->id");
+            throw new Exception("Cannot delete cart line with cart id: {$businessCart->id}");
         }
     }
 }
