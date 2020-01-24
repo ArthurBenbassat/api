@@ -4,4 +4,5 @@ class BusinessCartLine {
     public $cart_id;
     public $product;
     public $quantity;
+    public $linePrice;
 }

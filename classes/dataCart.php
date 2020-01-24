@@ -50,6 +50,10 @@ class DataCart
             $cart_lines = new DataCartLine(); 
             $cart_lines->read($businessCart);
 
+            for ($i=0; $i < Count($businessCart->lines); $i++) {
+                $businessCart->totalPrice += $businessCart->lines[$i]->linePrice;
+            }
+
             return $businessCart;
         } else {
             throw new Exception("Cart {$businessCart->id} / {$businessCart->guid} not found");

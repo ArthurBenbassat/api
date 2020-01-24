@@ -2,7 +2,7 @@
 require_once 'businessCart.php';
 require_once 'businessCartLine.php';
 require_once 'dataCart.php';
-require_once 'dataCartline.php';
+require_once 'dataCartLine.php';
 
 class ApplicationCart {
     public function execute($requestType, $params, $data){
@@ -49,7 +49,8 @@ class ApplicationCart {
                     $businessCart->guid = $params[0];                    
                     $businessCartLine->quantity = $data->quantity;
                     $businessCartLine->id = $params[2];
-                    $cart_line->updateQuantity($cart->readByGuid($businessCart->guid), $businessCartLine);
+                    $businessCart = $cart->readByGuid($businessCart->guid);
+                    $cart_line->updateQuantity($businessCart, $businessCartLine, $data->quantity);
                     $cart->updateDate($businessCart);
                 } else {
                     throw new Exception('Unknown cart resource');
