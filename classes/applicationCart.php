@@ -23,11 +23,24 @@ class ApplicationCart {
                 $businessCart->guid = $params[0];
                 
                 $businessCart = $cart->readByGuid($businessCart->guid);
+                // MOET NOG AAN GEWERKT WORDEN
+                for ($i=0; $i < count($businessCart->lines); $i++) {
+                    if ($businessCart->lines[$i]->product->id == $data->product_id) {
+                        $againProduct = true;
+                        $quantity = $businessCart->lines[$i]->quantity;
+                        $lineId = $businessCart->lines[$i]->id;
+                    }
+                }
+                if ($againProduct == true) {
+                    $cart_line->updateQuantity($businessCart, $lineId, $quantity + 1);
 
-                $businessCartLine->product_id = $data->product_id;
-                $businessCartLine->quantity = $data->quantity;
-                $cart->updateDate($businessCart);
-                $cart_line->create($businessCart->id, $businessCartLine);
+                } else  {
+                    $businessCartLine->product_id = $data->product_id;
+                    $businessCartLine->quantity = $data->quantity;
+                    $cart->updateDate($businessCart);
+                    $cart_line->create($businessCart->id, $businessCartLine);
+                }
+
                 return $cart->readByGuid($businessCart->guid);
             } else {
                 $businessCartLine->quantity = $data->quantity;
@@ -50,7 +63,8 @@ class ApplicationCart {
                     $businessCartLine->quantity = $data->quantity;
                     $businessCartLine->id = $params[2];
                     $businessCart = $cart->readByGuid($businessCart->guid);
-                    $cart_line->updateQuantity($businessCart, $businessCartLine, $data->quantity);
+                    
+                    $cart_line->updateQuantity($businessCart, $businessCartLine->id, $data->quantity);
                     $cart->updateDate($businessCart);
                 } else {
                     throw new Exception('Unknown cart resource');

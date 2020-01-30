@@ -5,4 +5,5 @@ class BusinessCart {
     public $user_id;
     public $lines = [];
     public $totalPrice;
+    public $totalQuantity;
 }
