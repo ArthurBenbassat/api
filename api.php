@@ -8,6 +8,7 @@ require_once 'classes/applicationVerify.php';
 require_once 'classes/applicationCategory.php';
 require_once 'classes/applicationCustomer.php';
 require_once 'classes/applicationCart.php';
+require_once 'classes/applicationCheckout.php';
 
 try {
     // get the URL and extract the string after /api.php/
@@ -70,6 +71,9 @@ try {
             $o = new ApplicationCart();
             $retval = $o->execute($requestType, $params, $data);
             break;
+        case 'checkout':
+            $o = new ApplicationCheckout();
+            $retval = $o->execute($params, $data);
         default:
             throw new Exception("Unknown resource: $resource");
     }
