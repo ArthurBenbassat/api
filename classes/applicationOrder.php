@@ -9,7 +9,7 @@ class ApplicationOrder {
         $businessCart = new BusinessCart();
         $businessCustomer = new BusinessCustomer();
         $dataCheckout = new DataOrder();
-        
+        var_dump($data);
         $businessCart = json_decode($data->cart);
 
         $businessCustomer->id = $data->userId;
@@ -23,7 +23,7 @@ class ApplicationOrder {
         $businessCustomer->country = $data->country;
         
         $orederId = $dataCheckout->createCheckout($businessCustomer);
-        $dataCheckout->createCheckoutLines($businessCart, $orederId);
+        //$dataCheckout->createCheckoutLines($businessCart, $orederId);
 
 
     }

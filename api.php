@@ -8,7 +8,7 @@ require_once 'classes/applicationVerify.php';
 require_once 'classes/applicationCategory.php';
 require_once 'classes/applicationCustomer.php';
 require_once 'classes/applicationCart.php';
-require_once 'classes/applicationCheckout.php';
+require_once 'classes/applicationOrder.php';
 
 try {
     // get the URL and extract the string after /api.php/

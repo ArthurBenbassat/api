@@ -9,15 +9,22 @@ class DataOrder {
     }
 
     function createCheckout($businessCustomer) {
+        $sql = "INSERT INTO shop_order (customer_id, delivery_first_name, delivery_last_name, delivery_address_line1, delivery_address_line2, delivery_postal_code, delivery_city, delivery_country, delivery_email, status_id, order_date)
+        values ({$businessCustomer->id}, '{$businessCustomer->first_name}', '{$businessCustomer->last_name}', '{$businessCustomer->address_line1}', '{$businessCustomer->address_line2}', '{$businessCustomer->postal_code}', '{$businessCustomer->city}', '{$businessCustomer->country}', '{$businessCustomer->email}', 1, date())";
+        //var_dump($businessCustomer);
+        $this->db->execute($sql);
+        /*
         try {
             $sql = "INSERT INTO shop_order (customer_id, delivery_first_name, delivery_last_name, delivery_address_line1, delivery_address_line2, delivery_postal_code, delivery_city, delivery_country, delivery_email, status_id, order_date)
             values ({$businessCustomer->id}, '{$businessCustomer->first_name}', '{$businessCustomer->last_name}', '{$businessCustomer->address_line1}', '{$businessCustomer->address_line2}', '{$businessCustomer->postal_code}', '{$businessCustomer->city}', '{$businessCustomer->country}', '{$businessCustomer->email}', 1, date())";
+            //var_dump($businessCustomer);
             $this->db->execute($sql);
             
             return $this->db->connection->insert_id;
         } catch (Exception $e) {
             throw new Exception("Cannot add cart to checkout");
         }
+        */
     }
 
     function createCheckoutLines($businessCart, $orderId) {
