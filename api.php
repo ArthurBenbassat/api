@@ -71,8 +71,8 @@ try {
             $o = new ApplicationCart();
             $retval = $o->execute($requestType, $params, $data);
             break;
-        case 'checkout':
-            $o = new ApplicationCheckout();
+        case 'order':
+            $o = new ApplicationOrder();
             $retval = $o->execute($params, $data);
         default:
             throw new Exception("Unknown resource: $resource");

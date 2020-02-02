@@ -2,13 +2,17 @@
 require_once 'businessCart.php';
 require_once 'businessCustomer.php';
 
-require_once 'dataCheckout.php';
+require_once 'dataOrder.php';
 
-class ApplicationCheckout {
+class ApplicationOrder {
     function execute($params, $data) {
-        $cart = new BusinessCart();
-        $cart = json_decode($data['cart']);
+        $businessCart = new BusinessCart();
         $businessCustomer = new BusinessCustomer();
+        $dataCheckout = new DataOrder();
+        
+        $businessCart = json_decode($data->cart);
+
+        $businessCustomer->id = $data->userId;
         $businessCustomer->email = $data->email;
         $businessCustomer->first_name = $data->first_name;
         $businessCustomer->last_name = $data->last_name;
@@ -17,7 +21,10 @@ class ApplicationCheckout {
         $businessCustomer->postal_code = $data->postal_code;
         $businessCustomer->city = $data->city;
         $businessCustomer->country = $data->country;
-        $businessCustomer->phone_number = $data->phone_number;
-        $businessCustomer->organization_name = $data->organization_name;
+        
+        $orederId = $dataCheckout->createCheckout($businessCustomer);
+        $dataCheckout->createCheckoutLines($businessCart, $orederId);
+
+
     }
 }
