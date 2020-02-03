@@ -12,7 +12,8 @@ class DataOrder {
 
         try {
             $sql = "INSERT INTO shop_order (customer_id, delivery_first_name, delivery_last_name, delivery_address_line1, delivery_address_line2, delivery_postal_code, delivery_city, delivery_country, delivery_email, status_id, order_date)
-            values ({$businessCustomer->id}, '{$businessCustomer->first_name}', '{$businessCustomer->last_name}', '{$businessCustomer->address_line1}', '{$businessCustomer->address_line2}', '{$businessCustomer->postal_code}', '{$businessCustomer->city}', '{$businessCustomer->country}', '{$businessCustomer->email}', 1, date())";
+            values ({$businessCustomer->id}, '{$businessCustomer->first_name}', '{$businessCustomer->last_name}', '{$businessCustomer->address_line1}', '{$businessCustomer->address_line2}', '{$businessCustomer->postal_code}', '{$businessCustomer->city}', '{$businessCustomer->country}', '{$businessCustomer->email}', 1, now())";
+            
             $this->db->execute($sql);
             
             return $this->db->connection->insert_id;
@@ -37,7 +38,7 @@ class DataOrder {
 
     function deleteCart($guid) {
         try {
-            $sql = "DELETE FROM shop_cart WHERE guid = $guid";
+            $sql = "DELETE FROM shop_cart WHERE guid = '$guid'";
             $this->db->execute($sql);
         } catch (Exception $e) {
             throw new Exception("Cannot delete cart $guid");

@@ -34,7 +34,8 @@ try {
     // extract the HTTP command
     $requestType = $_SERVER['REQUEST_METHOD'];
     if ($requestType != 'GET') {
-        $data = file_get_contents('php://input');            
+        $data = file_get_contents('php://input');   
+        
         $data = json_decode($data);
     } else {
         $data = '';
