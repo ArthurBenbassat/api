@@ -11,6 +11,7 @@ class ApplicationOrder {
         $dataCheckout = new DataOrder();
         var_dump($data);
         $businessCart = json_decode($data->cart);
+        
 
         $businessCustomer->id = $data->userId;
         $businessCustomer->email = $data->email;
@@ -23,8 +24,8 @@ class ApplicationOrder {
         $businessCustomer->country = $data->country;
         
         $orederId = $dataCheckout->createCheckout($businessCustomer);
-        //$dataCheckout->createCheckoutLines($businessCart, $orederId);
-
+        $dataCheckout->createCheckoutLines($businessCart, $orederId);
+        $dataCheckout->deleteCart($businessCart->guid);
 
     }
 }

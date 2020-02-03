@@ -74,6 +74,7 @@ try {
         case 'order':
             $o = new ApplicationOrder();
             $retval = $o->execute($params, $data);
+            
         default:
             throw new Exception("Unknown resource: $resource");
     }
