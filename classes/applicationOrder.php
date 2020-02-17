@@ -9,7 +9,7 @@ class ApplicationOrder {
         $businessCart = new BusinessCart();
         $businessCustomer = new BusinessCustomer();
         $dataCheckout = new DataOrder();
-        var_dump($data);
+
         $businessCart = $data->cart;
         
 
