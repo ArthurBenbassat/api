@@ -4,22 +4,23 @@ require_once 'dataProduct.php';
 
 class ApplicationProduct {
     public function execute($params, $data) {
-        if (count($params)) {
-            return $this->get($params[0]);
+        //var_dump($data);exit;
+        if (count($params) == 1) {
+            return $this->get($params[0], $data->language);
         }else {
-            return $this->getAll();
+            return $this->getAll($data->language);
         }
     }
 
-    private function get($id) {
+    private function get($id, $language) {
         $product = new DataProduct();
 
-        return $product->read($id);
+        return $product->read($id, $language);
     }
 
-    private function getAll() {
+    private function getAll($language) {
         $product = new DataProduct();
 
-        return $product->readAll();        
+        return $product->readAll($language);        
     }
 }

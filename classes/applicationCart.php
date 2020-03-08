@@ -11,7 +11,6 @@ class ApplicationCart {
         $cart_line = new DataCartLine();
         $businessCartLine = new BusinessCartLine();
         $businessCart = new BusinessCart();
-        //file_put_contents("C:\tmp\log.txt", "");exit;
         if ($requestType == 'POST') {
             if (!empty($data->user_id)) {
                 $businessCart->user_id = $data->user_id; 

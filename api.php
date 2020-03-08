@@ -30,7 +30,6 @@ try {
     for ($i = 1; $i < count($resourceAndParamaters); $i++) {
         $params[] = $resourceAndParamaters[$i];
     }
-
     // extract the HTTP command
     $requestType = $_SERVER['REQUEST_METHOD'];
     if ($requestType != 'GET') {
@@ -40,7 +39,7 @@ try {
     } else {
         $data = '';
     }
-
+    //var_dump($data);exit;
 
     // analyse the command
     switch ($resource) {
