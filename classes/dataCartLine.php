@@ -24,7 +24,7 @@ class DataCartLine
     }
 
     public function read(&$businessCart) {
-        $sql = "SELECT cl.id cart_lines_id, cl.cart_id, cl.quantity, p.* FROM shop_cart_lines cl INNER JOIN shop_products p ON cl.product_id = p.id WHERE cl.cart_id = {$businessCart->id}";
+        $sql = "SELECT cl.id cart_lines_id, cl.cart_id, cl.quantity, p.*, m.media as photo FROM shop_cart_lines cl INNER JOIN shop_products p ON cl.product_id = p.id LEFT OUTER JOIN shop_media m ON m.id = p.media_id WHERE cl.cart_id = {$businessCart->id}";
             $result = $this->db->execute($sql);
             while ($rij = $result->fetch_assoc()) {
                 $businessCartLine = new BusinessCartLine();
@@ -37,7 +37,7 @@ class DataCartLine
                 $businessProduct->id = $rij['id'];
                 $businessProduct->name = $rij['name'];
                 $businessProduct->price = $rij['price'];
-                $businessProduct->photo = $rij['media_id'];
+                $businessProduct->photo = $rij['photo'];
                 $businessCartLine->product = $businessProduct;
 
                 $businessCartLine->linePrice = $rij['price'] * $rij['quantity']; 
