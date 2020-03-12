@@ -24,18 +24,18 @@ class DataCart
         }
     }
 
-    public function readById($cartId) {
+    public function readById($cartId, $language) {
         $sql = "SELECT * FROM shop_cart WHERE id = $cartId";
-        return $this->readBySQL($sql);
+        return $this->readBySQL($sql, $language);
     }
 
 
-    public function readByGuid($guid) {
+    public function readByGuid($guid, $language) {
         $sql = "SELECT * FROM shop_cart WHERE guid = '$guid'";
-        return $this->readBySQL($sql);
+        return $this->readBySQL($sql, $language);
     }
 
-    private function readBySQL($sql) {        
+    private function readBySQL($sql, $language) {        
         
         $result = $this->db->execute($sql);
 
@@ -48,7 +48,7 @@ class DataCart
             $businessCart->user_id = $rij['user_id'];
 
             $cart_lines = new DataCartLine(); 
-            $cart_lines->read($businessCart);
+            $cart_lines->read($businessCart, $language);
 
             for ($i=0; $i < Count($businessCart->lines); $i++) {
                 $businessCart->totalPrice += $businessCart->lines[$i]->linePrice;
