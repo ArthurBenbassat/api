@@ -25,11 +25,11 @@ class DataCartLine
 
     public function read(&$businessCart, $language) {
         if ($language == 'fr_FR') {
-            $sql = "SELECT cl.id cart_lines_id, cl.cart_id, cl.quantity, p.id, p.price, l.name, m.media photo FROM shop_cart_lines cl INNER JOIN shop_products p ON cl.product_id = p.id LEFT OUTER JOIN shop_media m ON m.id = p.media_id INNER JOIN shop_products_lang l ON p.id = l.id WHERE l.language = 'fr_FR' and cl.cart_id = {$businessCart->id}";
+            $sql = "SELECT cl.id cart_lines_id, cl.cart_id, cl.quantity, p.id, p.price, l.name, m.media photo, ca.name category FROM shop_cart_lines cl INNER JOIN shop_products p ON cl.product_id = p.id LEFT OUTER JOIN shop_media m ON m.id = p.media_id INNER JOIN shop_products_lang l ON p.id = l.id INNER JOIN shop_categories ca ON ca.id = p.category_id WHERE l.language = 'fr_FR' and cl.cart_id = {$businessCart->id}";
         } elseif ($language == 'en_US') {
-            $sql = "SELECT cl.id cart_lines_id, cl.cart_id, cl.quantity, p.id, p.price, l.name, m.media photo FROM shop_cart_lines cl INNER JOIN shop_products p ON cl.product_id = p.id LEFT OUTER JOIN shop_media m ON m.id = p.media_id INNER JOIN shop_products_lang l ON p.id = l.id WHERE l.language = 'en_US' and cl.cart_id = {$businessCart->id}";
+            $sql = "SELECT cl.id cart_lines_id, cl.cart_id, cl.quantity, p.id, p.price, l.name, m.media photo, ca.name category FROM shop_cart_lines cl INNER JOIN shop_products p ON cl.product_id = p.id LEFT OUTER JOIN shop_media m ON m.id = p.media_id INNER JOIN shop_products_lang l ON p.id = l.id INNER JOIN shop_categories ca ON ca.id = p.category_id WHERE l.language = 'en_US' and cl.cart_id = {$businessCart->id}";
         } elseif ($language =='nl_BE')  {
-            $sql = "SELECT cl.id cart_lines_id, cl.cart_id, cl.quantity, p.*, m.media photo FROM shop_cart_lines cl INNER JOIN shop_products p ON cl.product_id = p.id LEFT OUTER JOIN shop_media m ON m.id = p.media_id WHERE cl.cart_id = {$businessCart->id}";
+            $sql = "SELECT cl.id cart_lines_id, cl.cart_id, cl.quantity, p.*, m.media photo, ca.name category FROM shop_cart_lines cl INNER JOIN shop_products p ON cl.product_id = p.id LEFT OUTER JOIN shop_media m ON m.id = p.media_id INNER JOIN shop_categories ca ON ca.id = p.category_id WHERE cl.cart_id = {$businessCart->id}";
         } else {
             throw new Exception('Language not recognized');
         }
@@ -46,6 +46,7 @@ class DataCartLine
             $businessProduct->name = $rij['name'];
             $businessProduct->price = $rij['price'];
             $businessProduct->photo = $rij['photo'];
+            $businessProduct->category = $rij['category'];
             $businessCartLine->product = $businessProduct;
 
             $businessCartLine->linePrice = $rij['price'] * $rij['quantity']; 
