@@ -42,7 +42,8 @@ class ApplicationCart {
                         }
                     }
                     if ($againProduct == true) {
-                        $cart_line->updateQuantity($businessCart, $lineId, $quantity + 1);
+                        
+                        $cart_line->updateQuantity($businessCart, $lineId, $data->quantity + $quantity);
     
                     } else  {
                         $businessCartLine->product_id = $data->product_id;
