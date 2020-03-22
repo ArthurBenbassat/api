@@ -9,6 +9,7 @@ require_once 'classes/applicationCategory.php';
 require_once 'classes/applicationCustomer.php';
 require_once 'classes/applicationCart.php';
 require_once 'classes/applicationOrder.php';
+require_once 'classes/applicationBrand.php';
 
 try {
     // get the URL and extract the string after /api.php/
@@ -39,7 +40,6 @@ try {
     } else {
         $data = '';
     }
-    //var_dump($data);exit;
 
     // analyse the command
     switch ($resource) {
@@ -73,6 +73,10 @@ try {
             break;
         case 'order':
             $o = new ApplicationOrder();
+            $retval = $o->execute($params, $data);
+            break;
+        case 'brands':
+            $o = new ApplicationBrand();
             $retval = $o->execute($params, $data);
             break;
         default:
