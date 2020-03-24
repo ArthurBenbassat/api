@@ -41,13 +41,13 @@ class DataProduct {
 
         return $product;
     }
-    public function readAll($language, $where = "") {
+    public function readAll($language, $where = "", $orderBy = "") {
         if ($language == 'fr_FR') {
-            $sql = "SELECT pl.*, m.media as photo, p.price, b.name brand, p.weight, ca.name category from shop_products_lang pl left outer join shop_products p on pl.id = p.id Left outer JOIN shop_media m ON m.id = p.media_id INNER JOIN shop_categories_lang ca ON ca.id = p.category_id INNER JOIN shop_brands b ON p.brand_id = b.id where pl.language = 'fr_FR' AND ca.language = 'fr_FR' $where";
+            $sql = "SELECT pl.*, m.media as photo, p.price, b.name brand, p.weight, ca.name category from shop_products_lang pl left outer join shop_products p on pl.id = p.id Left outer JOIN shop_media m ON m.id = p.media_id INNER JOIN shop_categories_lang ca ON ca.id = p.category_id INNER JOIN shop_brands b ON p.brand_id = b.id where pl.language = 'fr_FR' AND ca.language = 'fr_FR' $where $orderBy";
         } elseif ($language == 'en_US') {
-            $sql = "SELECT pl.*, m.media photo, p.price, b.name brand, p.weight, ca.name category from shop_products_lang pl left outer join shop_products p on pl.id = p.id Left outer JOIN shop_media m ON m.id = p.media_id INNER JOIN shop_categories_lang ca ON ca.id = p.category_id INNER JOIN shop_brands b ON p.brand_id = b.id where pl.language = 'en_US' AND ca.language= 'en_US' $where";
+            $sql = "SELECT pl.*, m.media photo, p.price, b.name brand, p.weight, ca.name category from shop_products_lang pl left outer join shop_products p on pl.id = p.id Left outer JOIN shop_media m ON m.id = p.media_id INNER JOIN shop_categories_lang ca ON ca.id = p.category_id INNER JOIN shop_brands b ON p.brand_id = b.id where pl.language = 'en_US' AND ca.language= 'en_US' $where $orderBy";
         } elseif ($language == 'nl_BE') {
-            $sql = "SELECT m.media photo, p.name, p.price, p.id, p.weight, p.ingredients, b.name brand, ca.name category FROM shop_products p  INNER JOIN shop_categories ca ON ca.id = p.category_id Left outer JOIN shop_media m ON m.id = p.media_id INNER JOIN shop_brands b ON p.brand_id = b.id WHERE p.name <> '' $where;";
+            $sql = "SELECT m.media photo, p.name, p.price, p.id, p.weight, p.ingredients, b.name brand, ca.name category FROM shop_products p  INNER JOIN shop_categories ca ON ca.id = p.category_id Left outer JOIN shop_media m ON m.id = p.media_id INNER JOIN shop_brands b ON p.brand_id = b.id WHERE p.name <> '' $where $orderBy;";
         } else {
             throw new Exception('Language not recognized');
         }

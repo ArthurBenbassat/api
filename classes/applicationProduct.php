@@ -8,7 +8,7 @@ class ApplicationProduct {
             return $this->get($params[0], $data->language);
         }else {
             if (isset($data->filter)) {
-                return $this->getAll($data->language, $this->createWhereClause($data->filter));
+                return $this->getAll($data->language, $this->createWhereClause($data->filter), $this->createOrder($data->filter));
             } else {
                 return $this->getAll($data->language);
             }
@@ -21,10 +21,10 @@ class ApplicationProduct {
         return $product->read($id, $language);
     }
 
-    private function getAll($language, $where = "") {
+    private function getAll($language, $where = "", $orderBy = "") {
         $product = new DataProduct();
 
-        return $product->readAll($language, $where);        
+        return $product->readAll($language, $where, $orderBy);        
     }
 
     private function createWhereClause($filter) {
@@ -46,5 +46,31 @@ class ApplicationProduct {
             $whereClause .= ')';
         }
         return $whereClause;
+    }
+
+    private function createOrder($filter) {
+        $order = "";
+        if (isset($filter->sorting)) {
+            if ($filter->sorting == 'price') {
+                $order = "ORDER BY p.price";
+            } elseif ($filter->sorting == 'review') {
+                $order = "ORDER BY p.id";
+            } else {
+                $order = "ORDER BY p.name";
+            }
+        } else {
+            $order = "ORDER BY p.name";
+        }
+        if (isset($filter->order)) {
+            if ($filter->order == 'descending') {
+                $order .= " DESC";
+            } else {
+                $order .= ' ASC';
+            }
+        } else {
+            $order .= ' ASC';
+        }
+        
+        return $order;
     }
 }
