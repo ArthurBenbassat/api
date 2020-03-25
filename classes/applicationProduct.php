@@ -36,7 +36,7 @@ class ApplicationProduct {
             $whereClause .= ')';
         }
         if (isset($filter->cat_id)) {
-            if (isset($whereClause)) {
+            if (!$whereClause == "") {
                 $whereClause .= ' AND (category_id = ';
             } else {
                 $whereClause = 'AND (category_id = ';
@@ -44,6 +44,14 @@ class ApplicationProduct {
             $whereClause .= $filter->cat_id;
             $whereClause = str_replace(',', ' OR category_id = ', $whereClause);
             $whereClause .= ')';
+        }
+        if (isset($filter->price)) {
+            $minMax = str_replace('-', ' AND ', $filter->price);
+            if (!$whereClause == "") {
+                $whereClause .= " AND (p.price BETWEEN $minMax)";
+            } else {
+                $whereClause = "AND (p.price BETWEEN $minMax)";
+            }
         }
         return $whereClause;
     }
