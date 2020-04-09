@@ -46,6 +46,15 @@ class DataCart
             $businessCart->guid = $rij['guid'];
             $businessCart->last_update = $rij['last_update'];
             $businessCart->user_id = $rij['user_id'];
+            $businessCart->delivery_first_name = $rij['delivery_first_name'];
+            $businessCart->delivery_last_name = $rij['delivery_last_name'];
+            $businessCart->delivery_address_line1 = $rij['delivery_address_line1'];
+            $businessCart->delivery_address_line2 = $rij['delivery_address_line2'];
+            $businessCart->delivery_postal_code = $rij['delivery_postal_code'];
+            $businessCart->delivery_city = $rij['delivery_city'];
+            $businessCart->delivery_country = $rij['delivery_country'];
+            $businessCart->delivery_email = $rij['delivery_email'];
+            $businessCart->delivery_phone = $rij['delivery_phone'];
 
             $cart_lines = new DataCartLine(); 
             $cart_lines->read($businessCart, $language);
@@ -76,6 +85,15 @@ class DataCart
             $this->db->execute($sql);
         } catch (Exception $e) {
             throw new Exception("Cannot update date from guid: {$businessCart->guid}");
+        }
+    }
+
+    public function updateDelivery($businessCart) {
+        try {
+            $sql = "UPDATE shop_cart SET delivery_first_name = '{$businessCart->delivery_first_name}',delivery_last_name = '{$businessCart->delivery_last_name}',delivery_address_line1 = '{$businessCart->delivery_address_line1}',delivery_address_line2 = '{$businessCart->delivery_address_line2}',delivery_postal_code = '{$businessCart->delivery_postal_code}',delivery_city = '{$businessCart->delivery_city}',delivery_country = '{$businessCart->delivery_country}',delivery_email  = '{$businessCart->delivery_email}', delivery_phone = '{$businessCart->delivery_phone}' WHERE guid = '{$businessCart->guid}'";
+            $this->db->execute($sql);
+        } catch (Exception $e) {
+            throw new Exception("Cannot update delivery address from guid: {$businessCart->guid}");
         }
     }
 

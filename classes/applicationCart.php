@@ -69,26 +69,42 @@ class ApplicationCart {
             return $cart->readByGuid($businessCart->guid, 'nl_BE');
 
         } elseif ($requestType == 'PUT') {
-            if (isset($params[1])) {
-                // update of cart line
-                if ($params[1] == 'line') {
-                    $businessCart->guid = $params[0];                    
-                    $businessCartLine->quantity = $data->quantity;
-                    $businessCartLine->id = $params[2];
-                    $businessCart = $cart->readByGuid($businessCart->guid, $language);
-                    
-                    $cart_line->updateQuantity($businessCart, $businessCartLine->id, $data->quantity);
-                    $cart->updateDate($businessCart);
-                } else {
-                    throw new Exception('Unknown cart resource');
-                }
-            } else {
-                // update of the cart
+            if (isset($data->delivery_first_name)) {
+                $businessCart->delivery_first_name = $data->delivery_first_name;
+                $businessCart->delivery_last_name = $data->delivery_last_name;
+                $businessCart->delivery_address_line1 = $data->delivery_address_line1;
+                $businessCart->delivery_address_line2 = $data->delivery_address_line2;
+                $businessCart->delivery_postal_code = $data->delivery_postal_code;
+                $businessCart->delivery_city = $data->delivery_city;
+                $businessCart->delivery_country = $data->delivery_country;
+                $businessCart->delivery_email = $data->delivery_email;
+                $businessCart->delivery_phone =$data->delivery_phone;
+                
                 $businessCart->guid = $params[0];
-                $businessCart->user_id = $data->user_id;
-                $cart->updateUser($businessCart->user_id, $businessCart->guid);
-                $cart->updateDate($businessCart);
+                $cart->updateDelivery($businessCart);
+            } else {
+                if (isset($params[1])) {
+                    // update of cart line
+                    if ($params[1] == 'line') {
+                        $businessCart->guid = $params[0];                    
+                        $businessCartLine->quantity = $data->quantity;
+                        $businessCartLine->id = $params[2];
+                        $businessCart = $cart->readByGuid($businessCart->guid, $language);
+                        
+                        $cart_line->updateQuantity($businessCart, $businessCartLine->id, $data->quantity);
+                        $cart->updateDate($businessCart);
+                    } else {
+                        throw new Exception('Unknown cart resource');
+                    }
+                } else {
+                    // update of the cart
+                    $businessCart->guid = $params[0];
+                    $businessCart->user_id = $data->user_id;
+                    $cart->updateUser($businessCart->user_id, $businessCart->guid);
+                    $cart->updateDate($businessCart);
+                }
             }
+            
                         
             return $cart->readByGuid($businessCart->guid, $language);
             
