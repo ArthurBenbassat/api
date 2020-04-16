@@ -5,4 +5,5 @@ class BusinessProduct {
     public $name;
     public $price;
     public $photo;
+    public $video;
 }
