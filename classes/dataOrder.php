@@ -71,24 +71,10 @@ class DataOrder {
                 $order->delivery_email = $row['delivery_email'];
                 $order->delivery_phone = $row['delivery_phone'];
                 $order->status_id = $row['status_id'];
-                $order_lines = new BusinessOrderLine();
-                $order_lines->id = $row['line_id'];
-                $order_lines->order_id = $row['order_id'];
-                $order_lines->product = new BusinessProduct();
-                $order_lines->product->id = $row['product_id'];
-                $order_lines->product->name = $row['name'];
-                $order_lines->product->price = $row['price'];
-                $order_lines->quantity = $row['quantity'];
-                $order_lines->linePrice = $row['line_total'];
-                
-                $totalLines =+ 1;
-                $totalPrice += $row['line_total'];
-
-                $order->lines[] = $order_lines;
+                $order->products .= $row['name'] . ' x' . $row['quantity'] . ',';
                 
             }
-            $order->totalPrice = $totalPrice;
-            $order->totalLines = $totalLines; 
+            
             return $order;
         } catch (Exception $e) {
             throw new Exception("Cannot get order with orderid: $orderId");
