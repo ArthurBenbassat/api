@@ -61,13 +61,8 @@ class DataOrder {
                 $order->order_date = $row['order_date'];
                 $order->user_id = $row['customer_id'];
                 $order->totalPrice = $row['totalPrice'];
-                $order->delivery_first_name = $row['delivery_first_name'];
-                $order->delivery_last_name = $row['delivery_last_name'];
-                $order->delivery_address_line1 = $row['delivery_address_line1'];
-                $order->delivery_address_line2 = $row['delivery_address_line2'];
-                $order->delivery_postal_code = $row['delivery_postal_code'];
-                $order->delivery_city = $row['delivery_city'];
-                $order->delivery_country = $row['delivery_country'];
+                $order->address = $row['delivery_first_name'] . ' ' .  $row['delivery_last_name'] . "'\n'" . $row['delivery_address_line1'] . "'\n'" .  $row['delivery_postal_code'] . ' ' . $row['delivery_city'];
+                
                 $order->delivery_email = $row['delivery_email'];
                 $order->delivery_phone = $row['delivery_phone'];
                 $order->status_id = $row['status_id'];
