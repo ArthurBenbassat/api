@@ -6,19 +6,27 @@ require_once 'dataOrder.php';
 
 class ApplicationOrder {
     function execute($params, $data) {
-        $businessCart = new BusinessCart();
-        $dataCheckout = new DataOrder();
-
-        $businessCart = $data->cart;
+        if ($params[0]) {
+            $dataCheckout = new DataOrder();
+            return $dataCheckout->getorder($params[0]);
+        } elseif ($data) {
+            $businessCart = new BusinessCart();
+            $dataCheckout = new DataOrder();
+    
+            $businessCart = $data->cart;
+            
+            //add information in db
+            $orderId = $dataCheckout->createCheckout($businessCart);
+            
+            //add products in db
+            $dataCheckout->createCheckoutLines($businessCart, $orderId);
+    
+            //deleting cart
+            $dataCheckout->deleteCart($businessCart->guid);
+        } else {
+            throw new Exception("No orderid given");
+        }
         
-        //add information in db
-        $orderId = $dataCheckout->createCheckout($businessCart);
-        
-        //add products in db
-        $dataCheckout->createCheckoutLines($businessCart, $orderId);
-
-        //deleting cart
-        $dataCheckout->deleteCart($businessCart->guid);
 
     }
 }
