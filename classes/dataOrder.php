@@ -88,7 +88,7 @@ class DataOrder {
                 
             }
             $order->totalPrice = $totalPrice;
-            $order->totalQuantity = $totalLines; 
+            $order->totalLines = $totalLines; 
             return $order;
         } catch (Exception $e) {
             throw new Exception("Cannot get order with orderid: $orderId");
