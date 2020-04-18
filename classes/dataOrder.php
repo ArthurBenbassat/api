@@ -15,8 +15,8 @@ class DataOrder {
     function createCheckout($businessCart) {
 
         try {
-            $sql = "INSERT INTO shop_order (customer_id, delivery_first_name, delivery_last_name, delivery_address_line1, delivery_address_line2, delivery_postal_code, delivery_city, delivery_country, delivery_email, status_id, order_date)
-            values ({$businessCart->user_id}, '{$businessCart->first_name}', '{$businessCart->delivery_last_name}', '{$businessCart->delivery_address_line1}', '{$businessCart->delivery_address_line2}', '{$businessCart->delivery_postal_code}', '{$businessCart->delivery_city}', '{$businessCart->delivery_country}', '{$businessCart->delivery_email}', 1, now())";
+            $sql = "INSERT INTO shop_order (customer_id, guid, delivery_first_name, delivery_last_name, delivery_address_line1, delivery_address_line2, delivery_postal_code, delivery_city, delivery_country, delivery_email, status_id, order_date)
+            values ({$businessCart->user_id}, '{$businessCart->guid}','{$businessCart->first_name}', '{$businessCart->delivery_last_name}', '{$businessCart->delivery_address_line1}', '{$businessCart->delivery_address_line2}', '{$businessCart->delivery_postal_code}', '{$businessCart->delivery_city}', '{$businessCart->delivery_country}', '{$businessCart->delivery_email}', 1, now())";
             
             $this->db->execute($sql);
             //sending last inserted id back
@@ -51,11 +51,11 @@ class DataOrder {
 
     function getorder($orderId) {
         try {
-            $sql = "SELECT o.*, ol.id as line_id, ol.order_id, ol.product_id, ol.quantity, ol.unit_price, ol.line_total, p.name, p.price FROM shop_order o INNER JOIN shop_order_line ol ON ol.order_id = o.id INNER JOIN shop_products p ON ol.product_id = p.id WHERE o.id = $orderId";
+            $sql = "SELECT o.*, ol.id as line_id, ol.order_id, ol.product_id, ol.quantity, ol.unit_price, ol.line_total, p.name, p.price FROM shop_order o INNER JOIN shop_order_line ol ON ol.order_id = o.id INNER JOIN shop_products p ON ol.product_id = p.id WHERE o.guid = '$orderId'";
             $result = $this->db->execute($sql);
 
             $order = new BusinessOrder();
-            //$order = new stdClass();
+            
             while ($row = $result->fetch_assoc()) {
                 $order->id = $row['id'];
                 $order->order_date = $row['order_date'];
