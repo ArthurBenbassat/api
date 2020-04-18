@@ -23,6 +23,7 @@ class ApplicationOrder {
     
             //deleting cart
             $dataCheckout->deleteCart($businessCart->guid);
+            return $orderId;
         } else {
             throw new Exception("No orderid given");
         }
