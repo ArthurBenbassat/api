@@ -16,7 +16,7 @@ class DataOrder {
 
         try {
             $sql = "INSERT INTO shop_order (customer_id, guid, delivery_first_name, delivery_last_name, delivery_address_line1, delivery_address_line2, delivery_postal_code, delivery_city, delivery_country, delivery_email, status_id, order_date)
-            values ({$businessCart->user_id}, '{$businessCart->guid}','{$businessCart->first_name}', '{$businessCart->delivery_last_name}', '{$businessCart->delivery_address_line1}', '{$businessCart->delivery_address_line2}', '{$businessCart->delivery_postal_code}', '{$businessCart->delivery_city}', '{$businessCart->delivery_country}', '{$businessCart->delivery_email}', 1, now())";
+            values ({$businessCart->user_id}, '{$businessCart->guid}', '{$businessCart->first_name}', '{$businessCart->delivery_last_name}', '{$businessCart->delivery_address_line1}', '{$businessCart->delivery_address_line2}', '{$businessCart->delivery_postal_code}', '{$businessCart->delivery_city}', '{$businessCart->delivery_country}', '{$businessCart->delivery_email}', 1, now())";
             
             $this->db->execute($sql);
             //sending last inserted id back
