@@ -70,6 +70,9 @@ class DataProduct {
             $product->category = $row['category'];
             $products[] = $product;
         } 
+        
         return $products;
     }
+
+  
 }
