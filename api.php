@@ -43,7 +43,7 @@ try {
 
     // analyse the command
     switch ($resource) {
-        case 'customer':
+        case 'customers':
             $o =  new ApplicationCustomer();
             $retval = $o->execute($params, $data);
             break;

@@ -6,7 +6,13 @@ require_once 'businessCustomer.php';
 class ApplicationCustomer {
     public function execute($params, $data) {
         $customer = new DataCustomer();
-        return $customer->read($params[0]);
+        if ($params[0] == 'changePassword') {
+            return $customer->changePassword($params[1], $data->oldPassword, $data->newPassword);
+        } else {
+            
+            return $customer->read($params[0]);
+        }
+        
     }
 
 }

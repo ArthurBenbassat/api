@@ -1,6 +1,7 @@
 <?php
 require_once 'DBConnection.php';
 require_once 'businessCustomer.php';
+require_once 'sql/settings.php';
 
 class DataCustomer
 {
@@ -14,7 +15,7 @@ class DataCustomer
     public function create($businessCustomer)
     {       
         try {
-            $salt = 'zrgfkjhzghzkrgj';
+            $salt = SALT;
             $hashedPassword = md5($businessCustomer->password . $salt);
             $token = bin2hex(openssl_random_pseudo_bytes(8));
 
@@ -129,7 +130,7 @@ class DataCustomer
         if ($stmt->num_rows > 0) {
             $stmt->bind_result($id, $passwordHashedDB, $firstName, $lastName, $verified);
             $stmt->fetch();
-            $salt = 'zrgfkjhzghzkrgj';
+            $salt = SALT;
             $passwordHashed = md5($password . $salt);
 
             if ($passwordHashed == $passwordHashedDB) {
@@ -144,5 +145,30 @@ class DataCustomer
         $stmt->close();
     }
 
+    public function changePassword($customerId, $oldPassword, $newPassword) {
+        if ($stmt = $this->db->connection->prepare('SELECT password FROM shop_customers WHERE id = ?')) {
+            $stmt->bind_param('s', $customerId);
+            $stmt->execute();
+            $stmt->store_result();
+        }
 
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($passwordHashedDB);
+            $stmt->fetch();
+            $salt = SALT;
+            $passwordHashed = md5($oldPassword . $salt);
+
+            if ($passwordHashed == $passwordHashedDB) {
+                $newPasswordHashed = md5($newPassword . $salt);
+                $sql = "UPDATE shop_customers SET password = '$newPasswordHashed' WHERE id = $customerId";
+                $this->db->execute($sql);
+            } else {
+                throw new Exception('Incorrect oldpassword!');
+            }
+        } else {
+            throw new Exception("Incorrect customerID!");
+        }
+        $stmt->close();
+    }
+    
 }
