@@ -77,10 +77,6 @@ class DataCustomer
         
      }
 
-    
-
-    public function delete($customerID)
-    { }
 
     public function update($businessCustomer){ 
 
@@ -92,29 +88,6 @@ class DataCustomer
         } catch (Exception $e) {
             throw new Exception("Customer: $businessCustomer->email cannot update status");
         }
-        
-    }
-
-    public function readAll()
-    { 
-        /*
-        // TODO: AF TE WERKEN!!!
-        while ($rij = $result->fetch_assoc()) {
-            $this->id = $rij["id"];
-            $this->customer_type_id = $rij["customer_type_id"];
-            $this->email = $rij["email"];
-            $this->first_name = $rij["first_name"];
-            $this->last_name = $rij["last_name"];
-            $this->address_line1 = $rij["address_line1"];
-            $this->address_line2 = $rij["address_line2"];
-            $this->postal_code = $rij["postal_code"];
-            $this->city = $rij["city"];
-            $this->country = $rij["country"];
-            $this->phone_number = $rij["phone_number"];
-            $this->organization_name = $rij["organization_name"];
-            $this->vat_number = $rij["vat_number"];
-        }
-        */
         
     }
 
@@ -171,4 +144,27 @@ class DataCustomer
         $stmt->close();
     }
     
+    public function changeDetails($businessCustomer) {
+        try {
+            $sql = "UPDATE shop_customers SET
+                " . 'email = ' . "
+                '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->email) . "',
+                first_name = '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->first_name) . "',
+                last_name = '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->last_name) . "',
+                address_line1 = '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->address_line1) . "',
+                address_line2 = '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->address_line2) . "',
+                postal_code = '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->postal_code) . "',
+                city = '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->city) . "',
+                country = '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->country) . "',
+                phone_number = '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->phone_number) . "',
+                organization_name = '" . mysqli_real_escape_string($this->db->connection, $businessCustomer->organization_name) . "'
+                WHERE id = {$businessCustomer->id}";
+                    
+                $this->db->execute($sql);
+                
+    
+        } catch (Exception $e) {
+            throw new Exception('Cannot update customer');
+        }
+    }
 }
