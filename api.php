@@ -13,21 +13,6 @@ require_once 'classes/applicationBrand.php';
 require_once 'sql/settings.php';
 
 try {
-    //check user
-    $valid_passwords = array (API_USER => API_PASSWORD);
-    $valid_users = array_keys($valid_passwords);
-    
-    $user = $_SERVER['PHP_AUTH_USER'];
-    $pass = $_SERVER['PHP_AUTH_PW'];
-    
-    $validated = (in_array($user, $valid_users)) && ($pass == $valid_passwords[$user]);
-    
-    if (!$validated) {
-      header('WWW-Authenticate: Basic realm="My Realm"');
-      header('HTTP/1.0 401 Unauthorized');
-      die ("Not authorized");
-    }
-
     // get the URL and extract the string after /api.php/
     $start = strpos($_SERVER['PHP_SELF'], '/api.php/');
     if ($start === FALSE) {
@@ -56,6 +41,23 @@ try {
     } else {
         $data = '';
     }
+    
+    //check user
+    $valid_passwords = array (API_USER => API_PASSWORD);
+    $valid_users = array_keys($valid_passwords);
+    
+    $user = $_SERVER['PHP_AUTH_USER'];
+    $pass = $_SERVER['PHP_AUTH_PW'];
+    
+    $validated = (in_array($user, $valid_users)) && ($pass == $valid_passwords[$user]);
+    
+    if (!$validated && $resource != 'order') {
+      header('WWW-Authenticate: Basic realm="My Realm"');
+      header('HTTP/1.0 401 Unauthorized');
+      die ("Not authorized");
+    }
+
+    
 
     // analyse the command
     switch ($resource) {
